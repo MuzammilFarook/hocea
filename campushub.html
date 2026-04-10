@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CampusHub — Campus Services Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet"/>
+
+<style>
+:root {
+  --navy:      #0B1D3A;
+  --navy2:     #142547;
+  --gold:      #C9973A;
+  --gold-lt:   #F5E6C8;
+  --gold-dk:   #7A5B1E;
+  --cream:     #FAF7F2;
+  --surface:   #FFFFFF;
+  --s2:        #F4F1EC;
+  --border:    rgba(11,29,58,0.10);
+  --border2:   rgba(11,29,58,0.18);
+  --text:      #0B1D3A;
+  --muted:     #6B7280;
+  --success:   #2D6A4F;
+  --s-bg:      #D8F3DC;
+  --danger:    #9B2335;
+  --d-bg:      #FFE4E8;
+  --warn:      #7A5B1E;
+  --w-bg:      #FFF3CD;
+  --info:      #1A5276;
+  --i-bg:      #D6EAF8;
+  --r:         10px;
+  --r-lg:      16px;
+  --r-xl:      22px;
+  --ff-d:      'Playfair Display', serif;
+  --ff-b:      'Outfit', sans-serif;
+  --sh:        0 2px 12px rgba(11,29,58,0.08);
+  --sh-md:     0 6px 28px rgba(11,29,58,0.13);
+  --tr:        all 0.2s ease;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--ff-b); background: var(--cream); color: var(--text); font-size: 15px; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp   { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn   { from { opacity:0; } to { opacity:1; } }
+@keyframes pulse    { 0%,100%{opacity:1;} 50%{opacity:.45;} }
+@keyframes slideIn  { from { transform:translateX(-100%); } to { transform:translateX(0); } }
+.au { animation: fadeUp .4s ease both; }
+.ai { animation: fadeIn .3s ease both; }
+.d1{animation-delay:.06s} .d2{animation-delay:.12s} .d3{animation-delay:.18s} .d4{animation-delay:.24s} .d5{animation-delay:.30s}
+
+/* ══════════════════════════════
+   LOGIN SCREEN
+══════════════════════════════ */
+#loginScreen {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex;
+  align-items: stretch;
+}
+.login-left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px;
+}
+.login-right {
+  width: 420px;
+  background: rgba(255,255,255,0.035);
+  border-left: 1px solid rgba(255,255,255,0.07);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 60px 48px;
+}
+.logo-mark { width:12px; height:12px; background:var(--gold); border-radius:50%; display:inline-block; margin-right:10px; flex-shrink:0; }
+.login-title { font-family:var(--ff-d); font-size:38px; color:#fff; line-height:1.1; margin-bottom:8px; }
+.login-sub   { color:rgba(255,255,255,.42); font-size:14px; font-weight:300; margin-bottom:44px; }
+.lbl { display:block; font-size:11px; font-weight:600; color:rgba(255,255,255,.45); text-transform:uppercase; letter-spacing:.08em; margin-bottom:7px; }
+.inp {
+  width:100%; padding:12px 16px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--r); color:#fff; font-family:var(--ff-b); font-size:14px;
+  outline:none; transition:var(--tr);
+}
+.inp:focus { border-color:var(--gold); background:rgba(255,255,255,.10); }
+.inp::placeholder { color:rgba(255,255,255,.25); }
+.btn-gold {
+  width:100%; padding:13px;
+  background:var(--gold); color:var(--navy);
+  border:none; border-radius:var(--r);
+  font-family:var(--ff-b); font-size:14px; font-weight:600;
+  cursor:pointer; transition:var(--tr); letter-spacing:.02em;
+}
+.btn-gold:hover { background:#d4a44a; transform:translateY(-1px); }
+.feature-pill {
+  padding:16px 20px; border-radius:var(--r-lg);
+  border:1px solid rgba(255,255,255,.08);
+  display:flex; align-items:center; gap:14px; margin-bottom:12px;
+  transition:var(--tr);
+}
+.feature-pill:hover { background:rgba(255,255,255,.04); }
+.fp-icon { font-size:20px; }
+.fp-txt  { font-size:13px; font-weight:500; color:rgba(255,255,255,.6); }
+.demo-hint { margin-top:28px; padding:14px; background:rgba(255,255,255,.05); border-radius:var(--r); font-size:12px; color:rgba(255,255,255,.3); line-height:1.7; }
+
+/* ══════════════════════════════
+   MAIN APP
+══════════════════════════════ */
+#appScreen { display:none; min-height:100vh; }
+
+/* SIDEBAR */
+.sidebar {
+  width:240px; min-height:100vh;
+  background:var(--navy);
+  position:fixed; top:0; left:0; z-index:100;
+  display:flex; flex-direction:column;
+  padding-bottom:24px;
+}
+.sb-logo {
+  padding:28px 24px 20px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+.sb-logo-text { font-family:var(--ff-d); font-size:22px; color:#fff; display:flex; align-items:center; }
+.sb-logo-sub  { font-size:11px; color:rgba(255,255,255,.3); padding-left:22px; margin-top:3px; }
+.sb-nav { flex:1; padding:16px 12px; }
+.nav-item {
+  display:flex; align-items:center; gap:11px;
+  padding:11px 14px; border-radius:var(--r);
+  font-size:13.5px; font-weight:500;
+  color:rgba(255,255,255,.5);
+  cursor:pointer; transition:var(--tr); margin-bottom:3px;
+  border:none; background:transparent; width:100%; text-align:left;
+}
+.nav-item:hover  { color:rgba(255,255,255,.85); background:rgba(255,255,255,.07); }
+.nav-item.active { color:#fff; background:rgba(255,255,255,.13); }
+.nav-item i      { font-size:16px; }
+.sb-user { padding:16px 16px 0; border-top:1px solid rgba(255,255,255,.07); }
+.user-avatar {
+  width:38px; height:38px; border-radius:50%;
+  background:var(--gold); display:flex; align-items:center;
+  justify-content:center; font-size:13px; font-weight:600;
+  color:var(--gold-dk); flex-shrink:0;
+}
+.user-name { font-size:13px; font-weight:500; color:#fff; }
+.user-role { font-size:11px; color:rgba(255,255,255,.38); }
+.btn-signout {
+  width:100%; padding:8px; margin-top:12px;
+  border:1px solid rgba(255,255,255,.14);
+  background:transparent; border-radius:var(--r);
+  color:rgba(255,255,255,.45); font-family:var(--ff-b); font-size:12px;
+  font-weight:500; cursor:pointer; transition:var(--tr);
+}
+.btn-signout:hover { background:rgba(255,255,255,.08); color:#fff; }
+
+/* MAIN CONTENT */
+.main-content { margin-left:240px; padding:36px 40px; min-height:100vh; }
+
+/* PAGE HEADER */
+.page-header { margin-bottom:28px; }
+.page-title  { font-family:var(--ff-d); font-size:30px; font-weight:600; margin-bottom:4px; }
+.page-sub    { font-size:13px; color:var(--muted); font-weight:300; }
+
+/* CARDS */
+.card-base {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:20px 22px;
+  box-shadow:var(--sh);
+}
+.card-title { font-size:14px; font-weight:600; }
+
+/* METRIC CARDS */
+.metric-card {
+  background:var(--s2); border-radius:var(--r);
+  padding:18px 20px;
+}
+.metric-label { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:5px; }
+.metric-val   { font-size:28px; font-weight:600; line-height:1; }
+
+/* BADGES */
+.badge-pill {
+  display:inline-block; padding:3px 11px; border-radius:20px;
+  font-size:11px; font-weight:600; letter-spacing:.02em;
+}
+.bp-green  { background:var(--s-bg);  color:var(--success); }
+.bp-gold   { background:var(--gold-lt); color:var(--gold-dk); }
+.bp-red    { background:var(--d-bg);  color:var(--danger); }
+.bp-blue   { background:var(--i-bg);  color:var(--info); }
+.bp-navy   { background:var(--navy);  color:#fff; }
+.bp-gray   { background:#F1EFE8; color:#5F5E5A; }
+
+/* PROGRESS BAR */
+.prog-track { height:5px; background:#E8E4DC; border-radius:3px; }
+.prog-fill  { height:100%; border-radius:3px; transition:width .6s ease; }
+
+/* TABS */
+.tab-bar { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:22px; }
+.tab-btn {
+  padding:7px 18px; border-radius:20px;
+  border:1px solid var(--border2);
+  background:transparent; font-family:var(--ff-b);
+  font-size:13px; font-weight:500; color:var(--muted);
+  cursor:pointer; transition:var(--tr);
+}
+.tab-btn:hover  { border-color:var(--navy); color:var(--navy); }
+.tab-btn.active { background:var(--navy); border-color:var(--navy); color:#fff; }
+
+/* NOTICE ITEMS */
+.notice-item {
+  padding:14px 18px 14px 0;
+  border-bottom:1px solid var(--border);
+  display:flex; gap:12px; align-items:flex-start;
+}
+.notice-item:last-child { border-bottom:none; }
+.notice-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+
+/* EVENT CARDS */
+.event-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:18px 20px;
+  display:flex; gap:18px; align-items:flex-start;
+  box-shadow:var(--sh); transition:var(--tr);
+}
+.event-card:hover { box-shadow:var(--sh-md); transform:translateY(-2px); }
+.date-block {
+  background:var(--navy); border-radius:var(--r);
+  padding:10px 14px; text-align:center; min-width:58px; flex-shrink:0;
+}
+.date-day { font-size:24px; font-weight:600; color:#fff; line-height:1; }
+.date-mon { font-size:10px; color:rgba(255,255,255,.45); text-transform:uppercase; letter-spacing:.08em; margin-top:2px; }
+
+/* FACILITY CARDS */
+.fac-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--r-lg); padding:18px 20px;
+  box-shadow:var(--sh); transition:var(--tr);
+}
+.fac-card:hover { box-shadow:var(--sh-md); }
+.fac-icon-wrap {
+  width:42px; height:42px; border-radius:var(--r);
+  display:flex; align-items:center; justify-content:center; font-size:20px;
+}
+
+/* MODAL */
+.modal-overlay {
+  position:fixed; inset:0; background:rgba(11,29,58,.55);
+  display:none; align-items:center; justify-content:center;
+  z-index:999; padding:24px;
+}
+.modal-overlay.show { display:flex; animation:fadeIn .2s ease; }
+.modal-box {
+  background:var(--surface); border-radius:var(--r-xl);
+  padding:32px; width:100%; max-width:480px;
+  max-height:85vh; overflow-y:auto;
+  box-shadow:var(--sh-md);
+}
+.modal-title { font-family:var(--ff-d); font-size:22px; font-weight:600; margin-bottom:4px; }
+
+/* SLOT GRID */
+.slot-btn {
+  padding:9px 6px; border-radius:var(--r);
+  border:1px solid var(--border2);
+  background:transparent; font-family:var(--ff-b);
+  font-size:12px; font-weight:500; cursor:pointer;
+  transition:var(--tr); text-align:center;
+}
+.slot-btn:hover:not(:disabled) { background:var(--navy); color:#fff; border-color:var(--navy); }
+.slot-btn:disabled { background:var(--s2); color:var(--muted); border-color:transparent; cursor:not-allowed; opacity:.6; }
+.slot-btn.booked   { background:var(--s-bg); color:var(--success); border-color:transparent; }
+
+/* ACTION BUTTONS */
+.btn-rsvp {
+  padding:7px 20px; border-radius:var(--r); font-family:var(--ff-b);
+  font-size:12.5px; font-weight:600; cursor:pointer; transition:var(--tr);
+  border:1px solid var(--border2); background:var(--navy); color:#fff;
+}
+.btn-rsvp:hover:not(:disabled) { background:#142547; }
+.btn-rsvp.rsvped  { background:var(--s-bg); color:var(--success); border-color:transparent; }
+.btn-rsvp:disabled { opacity:.5; cursor:not-allowed; }
+
+/* TOAST */
+#toast {
+  position:fixed; bottom:28px; right:28px;
+  background:var(--navy); color:#fff;
+  padding:12px 20px; border-radius:var(--r); font-size:13px; font-weight:500;
+  z-index:9999; box-shadow:var(--sh-md);
+  display:none; animation:fadeUp .3s ease;
+  max-width:320px;
+}
+
+/* LIVE DOT */
+.live-dot { width:8px; height:8px; border-radius:50%; background:#2D6A4F; display:inline-block; animation:pulse 1.8s infinite; margin-right:6px; }
+
+/* SEARCH */
+.search-inp {
+  width:100%; padding:10px 16px 10px 40px;
+  background:var(--surface); border:1px solid var(--border2);
+  border-radius:var(--r); font-family:var(--ff-b); font-size:13.5px;
+  outline:none; transition:var(--tr); color:var(--text);
+}
+.search-inp:focus { border-color:var(--gold); }
+.search-wrap { position:relative; }
+.search-icon { position:absolute; left:13px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:15px; }
+
+/* FORMS */
+.form-lbl   { font-size:12px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; display:block; }
+.form-ctrl  {
+  width:100%; padding:10px 14px; font-family:var(--ff-b); font-size:14px;
+  border:1px solid var(--border2); border-radius:var(--r);
+  outline:none; transition:var(--tr); background:var(--surface); color:var(--text);
+}
+.form-ctrl:focus { border-color:var(--gold); }
+
+@media (max-width: 768px) {
+  .sidebar { width:200px; }
+  .main-content { margin-left:200px; padding:24px; }
+  .login-right { display:none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ LOGIN ══════════════ -->
+<div id="loginScreen">
+  <div class="login-left au">
+    <div style="max-width:380px">
+      <div class="login-title" style="display:flex;align-items:center;gap:0">
+        <span class="logo-mark"></span>CampusHub
+      </div>
+      <p class="login-sub">Your complete campus services portal</p>
+
+      <div style="margin-bottom:16px">
+        <label class="lbl">Email address</label>
+        <input id="loginEmail" class="inp" type="email" placeholder="you@campus.edu"/>
+      </div>
+      <div style="margin-bottom:28px">
+        <label class="lbl">Password</label>
+        <input id="loginPassword" class="inp" type="password" placeholder="••••••••"/>
+      </div>
+      <div id="loginError" style="display:none;background:var(--d-bg);color:var(--danger);border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:16px;"></div>
+      <button class="btn-gold" onclick="doLogin()">Sign in &rarr;</button>
+
+      <div class="demo-hint">
+        <strong style="color:rgba(255,255,255,.5)">Demo accounts</strong><br>
+        student@campus.edu / student123<br>
+        admin@campus.edu &nbsp;&nbsp;/ admin123
+      </div>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="au d1 feature-pill"><span class="fp-icon">🎓</span><span class="fp-txt">Student Portal</span></div>
+    <div class="au d2 feature-pill"><span class="fp-icon">📅</span><span class="fp-txt">Event Announcements</span></div>
+    <div class="au d3 feature-pill"><span class="fp-icon">🏛️</span><span class="fp-txt">Campus Facilities</span></div>
+    <div class="au d4 feature-pill"><span class="fp-icon">📢</span><span class="fp-txt">Notice Board</span></div>
+  </div>
+</div>
+
+<!-- ══════════════ APP ══════════════ -->
+<div id="appScreen">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-text"><span class="logo-mark"></span>CampusHub</div>
+      <div class="sb-logo-sub">Campus Services Portal</div>
+    </div>
+    <nav class="sb-nav">
+      <button class="nav-item active" onclick="showPage('portal',this)"><i class="bi bi-mortarboard"></i> Student Portal</button>
+      <button class="nav-item" onclick="showPage('events',this)"><i class="bi bi-calendar-event"></i> Events</button>
+      <button class="nav-item" onclick="showPage('facilities',this)"><i class="bi bi-building"></i> Facilities</button>
+      <button class="nav-item" onclick="showPage('notices',this)"><i class="bi bi-megaphone"></i> Notices</button>
+    </nav>
+    <div class="sb-user">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
+        <div class="user-avatar" id="sbAvatar">AM</div>
+        <div>
+          <div class="user-name" id="sbName">Arjun Mehta</div>
+          <div class="user-role" id="sbRole">Student</div>
+        </div>
+      </div>
+      <button class="btn-signout" onclick="doLogout()"><i class="bi bi-box-arrow-left"></i> Sign out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+
+    <!-- ── PORTAL ── -->
+    <div id="page-portal">
+      <div class="page-header au">
+        <h1 class="page-title" id="portalGreet">Good morning, Arjun 👋</h1>
+        <p class="page-sub" id="portalMeta">Computer Science · Year 3 · Semester 5</p>
+      </div>
+
+      <!-- Metrics -->
+      <div class="row g-3 mb-4 au d1">
+        <div class="col-md-4"><div class="metric-card"><div class="metric-label">CGPA</div><div class="metric-val" id="m-cgpa" style="color:var(--gold-dk)">8.6</div></div></div>
+        <div class="col-md-4"><div class="metric-card"><div class="metric-label">Avg Attendance</div><div class="metric-val" id="m-att" style="color:var(--success)">84%</div></div></div>
+        <div class="col-md-4"><div class="metric-card"><div class="metric-label">Credits Earned</div><div class="metric-val" id="m-credits" style="color:var(--info)">96</div></div></div>
+      </div>
+
+      <div class="row g-4">
+        <!-- Courses -->
+        <div class="col-lg-7 au d2">
+          <div class="card-base h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="card-title">Enrolled Courses</span>
+              <span class="badge-pill bp-blue" id="semBadge">Sem 5</span>
+            </div>
+            <div id="courseList"></div>
+          </div>
+        </div>
+        <!-- Notices preview -->
+        <div class="col-lg-5 au d3">
+          <div class="card-base h-100">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="card-title">Latest Notices</span>
+              <span class="badge-pill bp-red" id="urgentCount">3 urgent</span>
+            </div>
+            <div id="noticePreview"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EVENTS ── -->
+    <div id="page-events" style="display:none">
+      <div class="page-header au">
+        <h1 class="page-title">Event Announcements</h1>
+        <p class="page-sub">Upcoming campus events — click RSVP to register</p>
+      </div>
+      <div class="tab-bar au d1" id="eventTabs"></div>
+      <div id="eventList" class="d-flex flex-column gap-3"></div>
+    </div>
+
+    <!-- ── FACILITIES ── -->
+    <div id="page-facilities" style="display:none">
+      <div class="page-header au">
+        <h1 class="page-title">Campus Facilities</h1>
+        <p class="page-sub"><span class="live-dot"></span>Live availability · book a time slot</p>
+      </div>
+      <div id="facilityGrid" class="row g-3"></div>
+    </div>
+
+    <!-- ── NOTICES ── -->
+    <div id="page-notices" style="display:none">
+      <div class="page-header au">
+        <h1 class="page-title">Notice Board</h1>
+        <p class="page-sub">Announcements from departments and admin</p>
+      </div>
+      <div class="tab-bar au d1" id="noticeTabs"></div>
+      <div id="noticeList" class="d-flex flex-column gap-3"></div>
+    </div>
+
+  </main>
+</div>
+
+<!-- SLOT MODAL -->
+<div class="modal-overlay" id="slotModal">
+  <div class="modal-box">
+    <div class="d-flex justify-content-between align-items-start mb-4">
+      <div>
+        <div class="modal-title" id="modalFacName">CS Lab</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:3px" id="modalFacSub">Select a time slot to book</div>
+      </div>
+      <button onclick="closeModal()" style="background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);padding:0 4px;line-height:1">&times;</button>
+    </div>
+    <div style="margin-bottom:18px;display:flex;align-items:center;gap:12px">
+      <label class="form-lbl" style="margin:0;white-space:nowrap">Date</label>
+      <input type="date" class="form-ctrl" id="slotDate" style="flex:1" onchange="renderSlots()"/>
+    </div>
+    <div id="slotSuccess" style="display:none;background:var(--s-bg);color:var(--success);border-radius:var(--r);padding:10px 14px;font-size:13px;margin-bottom:16px;font-weight:500"></div>
+    <div class="row g-2" id="slotGrid"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+<script>
+// ══════════════════════════════════════════════
+//  DATABASE  (localStorage-backed)
+// ══════════════════════════════════════════════
+const DB = {
+  users: [
+    { id:'u1', name:'Arjun Mehta',   email:'student@campus.edu', password:'student123', role:'student',
+      dept:'Computer Science', year:3, sem:5, cgpa:8.6, credits:96,
+      courses:[
+        {code:'CS301',name:'Data Structures',      credits:4, att:80},
+        {code:'CS302',name:'DBMS',                 credits:4, att:65},
+        {code:'CS303',name:'Operating Systems',    credits:4, att:90},
+        {code:'CS304',name:'Computer Networks',    credits:3, att:72},
+        {code:'CS305',name:'Machine Learning',     credits:3, att:55},
+      ]
+    },
+    { id:'u2', name:'Admin User', email:'admin@campus.edu', password:'admin123', role:'admin',
+      dept:'Administration', year:1, sem:1, cgpa:0, credits:0, courses:[] }
+  ],
+
+  events: [
+    { id:'e1', title:'TechSymposium 2025 — Hackathon', desc:'Annual inter-college hackathon. Build solutions for real-world problems in 24 hours. Prizes worth ₹1,50,000.', cat:'Academic', venue:'CSE Block · Seminar Hall', date:'2025-10-15', time:'9:00 AM', organizer:'CSE Department', capacity:200 },
+    { id:'e2', title:'Guest Lecture: AI in Fintech',   desc:'Industry expert from a leading fintech firm discusses AI applications in modern banking and financial services.', cat:'Workshop', venue:'Seminar Hall A', date:'2025-10-18', time:'2:00 PM', organizer:'T&P Cell', capacity:150 },
+    { id:'e3', title:'Cultural Night — Diwali Fest',   desc:'Celebrate Diwali with live performances, food stalls, rangoli competition and grand lighting ceremony.', cat:'Cultural', venue:'Open Air Auditorium', date:'2025-10-22', time:'6:00 PM', organizer:'Student Council', capacity:500 },
+    { id:'e4', title:'Placement Prep Workshop',        desc:'Resume building, aptitude drills, and mock interview sessions. Open to 3rd and 4th year students.', cat:'Placement', venue:'LT-3', date:'2025-10-28', time:'10:00 AM', organizer:'T&P Cell', capacity:100 },
+    { id:'e5', title:'Sports Day 2025',                desc:'Inter-department cricket, football, badminton and athletics. Register your team before Oct 12.', cat:'Sports', venue:'Campus Ground', date:'2025-11-02', time:'7:00 AM', organizer:'Sports Committee', capacity:300 },
+  ],
+
+  facilities: [
+    { id:'f1', name:'CS Lab — Block A',  type:'lab',       icon:'💻', iconBg:'#EAF3DE', loc:'CSE Block, GF', total:40, occ:8,   status:'available', open:'08:00', close:'20:00', slot:60  },
+    { id:'f2', name:'Central Library',   type:'library',   icon:'📚', iconBg:'#FFF3CD', loc:'Main Building', total:60, occ:42,  status:'busy',      open:'08:00', close:'21:00', slot:120 },
+    { id:'f3', name:'Sports Complex',    type:'sports',    icon:'🏀', iconBg:'#D6EAF8', loc:'Campus North',  total:50, occ:10,  status:'available', open:'06:00', close:'20:00', slot:60  },
+    { id:'f4', name:'Cafeteria',         type:'cafeteria', icon:'🍱', iconBg:'#FFE4E8', loc:'Central Campus',total:200,occ:180, status:'busy',      open:'07:30', close:'21:00', slot:30  },
+    { id:'f5', name:'Seminar Hall A',    type:'seminar',   icon:'🎤', iconBg:'#EDE7F6', loc:'Admin Block',   total:150,occ:150, status:'busy',      open:'09:00', close:'18:00', slot:120 },
+    { id:'f6', name:'Health Center',     type:'health',    icon:'🏥', iconBg:'#FFECD2', loc:'Hostel Block',  total:10, occ:0,   status:'available', open:'08:00', close:'20:00', slot:30  },
+  ],
+
+  notices: [
+    { id:'n1', title:'Exam Schedule Released',      body:'November 2025 end-semester exam schedule has been published. Download the timetable from the examination portal under your student dashboard.',  priority:'high',   dept:'all', postedBy:'Exam Cell',   date:'2025-10-01' },
+    { id:'n2', title:'Semester 5 Hostel Fee Due',   body:'Hostel fees for Semester 5 are due by October 20. A late fee of ₹500 per week will be levied after the deadline. Pay via the fee portal.',      priority:'high',   dept:'all', postedBy:'Accounts',    date:'2025-10-02' },
+    { id:'n3', title:'TechSymposium Registration',  body:'Register for the annual hackathon before October 15. Teams of 2–4 students. Prizes include internship offers from sponsor companies.',           priority:'medium', dept:'CSE', postedBy:'CSE Dept',    date:'2025-10-03' },
+    { id:'n4', title:'New ACM Journals Available',  body:'ACM Digital Library access has been enabled for all students. Log in using your campus email ID at acm.org/digital-library.',                    priority:'low',    dept:'CSE', postedBy:'Library',     date:'2025-10-04' },
+    { id:'n5', title:'Anti-Ragging Workshop',       body:'A mandatory anti-ragging awareness session is scheduled on October 19 at 11 AM in the Main Auditorium. All first-year students must attend.',   priority:'high',   dept:'all', postedBy:'Dean Office',  date:'2025-10-05' },
+    { id:'n6', title:'Internship Applications Open',body:'Applications for summer 2026 internships are now open on the placement portal. Eligible: 3rd year students with CGPA ≥ 7.0.',                   priority:'medium', dept:'all', postedBy:'T&P Cell',    date:'2025-10-06' },
+  ],
+
+  // Live state stored in localStorage
+  _key: 'campushub_state',
+  load() {
+    const saved = localStorage.getItem(this._key);
+    return saved ? JSON.parse(saved) : { rsvps:{}, bookings:{} };
+  },
+  save(state) { localStorage.setItem(this._key, JSON.stringify(state)); },
+};
+
+// ══════════════════════════════════════════════
+//  APP STATE
+// ══════════════════════════════════════════════
+let currentUser = null;
+let state = DB.load();
+let currentFacility = null;
+
+// ══════════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════════
+function doLogin() {
+  const email    = $('#loginEmail').val().trim().toLowerCase();
+  const password = $('#loginPassword').val();
+  const user     = DB.users.find(u => u.email === email && u.password === password);
+
+  if (!user) {
+    $('#loginError').text('Invalid email or password.').show();
+    return;
+  }
+  $('#loginError').hide();
+  currentUser = user;
+  localStorage.setItem('campushub_user', user.id);
+  launchApp();
+}
+
+function doLogout() {
+  currentUser = null;
+  localStorage.removeItem('campushub_user');
+  $('#appScreen').hide();
+  $('#loginScreen').show();
+  $('#loginEmail').val(''); $('#loginPassword').val('');
+}
+
+// Auto-login on refresh
+$(function () {
+  const uid = localStorage.getItem('campushub_user');
+  if (uid) {
+    currentUser = DB.users.find(u => u.id === uid);
+    if (currentUser) { launchApp(); return; }
+  }
+});
+
+$('#loginPassword').on('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+function launchApp() {
+  // Sidebar user info
+  const ini = currentUser.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  $('#sbAvatar').text(ini);
+  $('#sbName').text(currentUser.name);
+  $('#sbRole').text(currentUser.role === 'admin' ? 'Administrator' : 'Student');
+
+  $('#loginScreen').hide();
+  $('#appScreen').show();
+
+  renderPortal();
+  renderEvents();
+  renderFacilities();
+  renderNotices();
+  showPage('portal', $('.nav-item').first()[0]);
+}
+
+// ══════════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════════
+function showPage(id, btn) {
+  $('.main-content > div').hide();
+  $(`#page-${id}`).show();
+  $('.nav-item').removeClass('active');
+  $(btn).addClass('active');
+}
+
+// ══════════════════════════════════════════════
+//  PORTAL
+// ══════════════════════════════════════════════
+function renderPortal() {
+  const u = currentUser;
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  $('#portalGreet').text(`${greet}, ${u.name.split(' ')[0]} 👋`);
+  $('#portalMeta').text(`${u.dept} · Year ${u.year} · Semester ${u.sem}`);
+  $('#semBadge').text(`Sem ${u.sem}`);
+
+  const avg = u.courses.length ? Math.round(u.courses.reduce((s,c)=>s+c.att,0)/u.courses.length) : 0;
+  $('#m-cgpa').text(u.cgpa.toFixed(1));
+  $('#m-att').text(`${avg}%`);
+  $('#m-credits').text(u.credits);
+
+  // Courses
+  let html = '';
+  u.courses.forEach((c,i) => {
+    const low = c.att < 75;
+    html += `
+      <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:${i<u.courses.length-1?'1px solid var(--border)':'none'}">
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.name}</div>
+          <div style="font-size:11px;color:var(--muted)">${c.code} · ${c.credits} credits</div>
+        </div>
+        <div style="flex:0 0 110px;display:flex;align-items:center;gap:8px">
+          <div class="prog-track" style="flex:1">
+            <div class="prog-fill" style="width:${c.att}%;background:${low?'var(--danger)':'#1A5276'}"></div>
+          </div>
+          <span style="font-size:12px;font-weight:600;color:${low?'var(--danger)':'var(--muted)'};min-width:32px;text-align:right">${c.att}%</span>
+        </div>
+      </div>`;
+  });
+  $('#courseList').html(html);
+
+  // Notices preview
+  const urgent = DB.notices.filter(n=>n.priority==='high');
+  $('#urgentCount').text(`${urgent.length} urgent`);
+  const dotColor = {high:'var(--danger)',medium:'var(--gold)',low:'var(--info)'};
+  let nh = '';
+  DB.notices.slice(0,5).forEach((n,i)=>{
+    nh+=`<div class="notice-item">
+      <div class="notice-dot" style="background:${dotColor[n.priority]}"></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13.5px;font-weight:500;margin-bottom:1px">${n.title}</div>
+        <div style="font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.body}</div>
+      </div>
+    </div>`;
+  });
+  $('#noticePreview').html(nh);
+}
+
+// ══════════════════════════════════════════════
+//  EVENTS
+// ══════════════════════════════════════════════
+function renderEvents(filter='All') {
+  const cats = ['All', ...new Set(DB.events.map(e=>e.cat))];
+  let tabHtml = '';
+  cats.forEach(c => {
+    tabHtml += `<button class="tab-btn${c===filter?' active':''}" onclick="renderEvents('${c}')">${c}</button>`;
+  });
+  $('#eventTabs').html(tabHtml);
+
+  const list = filter==='All' ? DB.events : DB.events.filter(e=>e.cat===filter);
+  const catVariant = {Academic:'bp-blue',Workshop:'bp-gold',Cultural:'bp-gold',Placement:'bp-navy',Sports:'bp-green'};
+  let html = '';
+  list.forEach((ev,i)=>{
+    const d = new Date(ev.date);
+    const rsvpKey = `${currentUser.id}_${ev.id}`;
+    const rsvped  = !!(state.rsvps[rsvpKey]);
+    const count   = Object.keys(state.rsvps).filter(k=>k.endsWith('_'+ev.id)).length;
+    const full    = count >= ev.capacity && !rsvped;
+    html += `
+    <div class="event-card au d${Math.min(i+1,5)}">
+      <div class="date-block">
+        <div class="date-day">${d.getDate()}</div>
+        <div class="date-mon">${d.toLocaleString('default',{month:'short'})}</div>
+      </div>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px">
+          <div>
+            <div style="font-size:15px;font-weight:600;margin-bottom:3px">${ev.title}</div>
+            <div style="font-size:12.5px;color:var(--muted)">${ev.venue} · ${ev.time}</div>
+          </div>
+          <span class="badge-pill ${catVariant[ev.cat]||'bp-gray'}" style="flex-shrink:0">${ev.cat}</span>
+        </div>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">${ev.desc}</p>
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="btn-rsvp ${rsvped?'rsvped':''}" ${full&&!rsvped?'disabled':''} onclick="toggleRsvp('${ev.id}',this)">
+            ${rsvped?'<i class="bi bi-check-circle-fill"></i> Registered':'RSVP'}
+          </button>
+          <span style="font-size:12px;color:var(--muted)">${count} / ${ev.capacity} registered</span>
+        </div>
+      </div>
+    </div>`;
+  });
+  $('#eventList').html(html||'<div style="text-align:center;padding:40px;color:var(--muted)">No events in this category.</div>');
+}
+
+function toggleRsvp(evId, btn) {
+  const key = `${currentUser.id}_${evId}`;
+  if (state.rsvps[key]) {
+    delete state.rsvps[key];
+    showToast('RSVP cancelled.');
+  } else {
+    state.rsvps[key] = true;
+    showToast('You\'re registered! See you there 🎉');
+  }
+  DB.save(state);
+  renderEvents($('#eventTabs .active').text());
+}
+
+// ══════════════════════════════════════════════
+//  FACILITIES
+// ══════════════════════════════════════════════
+function renderFacilities() {
+  const sv = { available:['bp-green','Available'], busy:['bp-gold','Busy'], closed:['bp-red','Closed'], maintenance:['bp-gray','Maintenance'] };
+  let html = '';
+  DB.facilities.forEach((f,i) => {
+    const pct = Math.round((f.occ/f.total)*100);
+    const barColor = pct>=90?'var(--danger)':pct>=70?'var(--gold-dk)':'var(--success)';
+    const [bc, bl] = sv[f.status]||sv.closed;
+    const disabled = f.status==='closed'||f.status==='maintenance';
+    html += `
+    <div class="col-md-6 col-lg-4 au d${Math.min(i+1,5)}">
+      <div class="fac-card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="fac-icon-wrap" style="background:${f.iconBg}">${f.icon}</div>
+            <div>
+              <div style="font-size:14px;font-weight:600">${f.name}</div>
+              <div style="font-size:11.5px;color:var(--muted)">${f.loc}</div>
+            </div>
+          </div>
+          <span class="badge-pill ${bc}">${bl}</span>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:5px">
+            <span>${f.occ} / ${f.total} occupied</span><span>${pct}%</span>
+          </div>
+          <div class="prog-track">
+            <div class="prog-fill" style="width:${pct}%;background:${barColor}"></div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px">Open ${f.open} – ${f.close} · ${f.slot}-min slots</div>
+        <button onclick="openSlotModal('${f.id}')" ${disabled?'disabled':''} style="width:100%;padding:9px;border-radius:var(--r);border:1px solid var(--border2);background:transparent;font-family:var(--ff-b);font-size:13px;font-weight:600;cursor:${disabled?'not-allowed':'pointer'};color:${disabled?'var(--muted)':'var(--text)'};opacity:${disabled?.5:1};transition:var(--tr)"
+          onmouseover="if(!this.disabled){this.style.background='var(--navy)';this.style.color='#fff'}"
+          onmouseout="this.style.background='transparent';this.style.color='${disabled?'var(--muted)':'var(--text)'}'"
+        >${disabled ? (f.status==='maintenance'?'Under Maintenance':'Closed') : 'View & Book Slots'}</button>
+      </div>
+    </div>`;
+  });
+  $('#facilityGrid').html(html);
+}
+
+function openSlotModal(facId) {
+  currentFacility = DB.facilities.find(f=>f.id===facId);
+  $('#modalFacName').text(currentFacility.name);
+  $('#modalFacSub').text(`${currentFacility.loc} · ${currentFacility.slot}-min slots`);
+  const today = new Date().toISOString().split('T')[0];
+  $('#slotDate').val(today).attr('min', today);
+  $('#slotSuccess').hide();
+  renderSlots();
+  $('#slotModal').addClass('show');
+}
+
+function closeModal() { $('#slotModal').removeClass('show'); currentFacility=null; }
+
+$('#slotModal').on('click', function(e){ if(e.target===this) closeModal(); });
+
+function renderSlots() {
+  if (!currentFacility) return;
+  const date = $('#slotDate').val();
+  const f = currentFacility;
+  const slots = generateSlots(f.open, f.close, f.slot);
+  const bKey  = `${currentUser.id}_${f.id}_`;
+  let html = '';
+  slots.forEach(slot => {
+    const bookedByMe = !!(state.bookings[bKey+date+'_'+slot]);
+    const bookedByAll = Object.keys(state.bookings).filter(k=>k.includes(`_${f.id}_${date}_${slot}`)).length;
+    const taken = bookedByAll > 0 && !bookedByMe;
+    html += `<div class="col-4">
+      <button class="slot-btn w-100 ${bookedByMe?'booked':''}" ${taken?'disabled':''} onclick="bookSlot('${slot}')">
+        ${bookedByMe?'<i class="bi bi-check2"></i> ':''} ${slot}
+      </button>
+    </div>`;
+  });
+  $('#slotGrid').html(html || '<div class="col-12 text-center" style="color:var(--muted);padding:24px">No slots available.</div>');
+}
+
+function generateSlots(open, close, dur) {
+  const slots = [];
+  let [h,m] = open.split(':').map(Number);
+  const [ch,cm] = close.split(':').map(Number);
+  while (h*60+m+dur <= ch*60+cm) {
+    const from = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+    let nh=h, nm=m+dur; if(nm>=60){nh+=Math.floor(nm/60);nm%=60;}
+    const to = `${String(nh).padStart(2,'0')}:${String(nm).padStart(2,'0')}`;
+    slots.push(`${from}–${to}`);
+    h=nh; m=nm;
+  }
+  return slots;
+}
+
+function bookSlot(slot) {
+  const date = $('#slotDate').val();
+  const f = currentFacility;
+  const key = `${currentUser.id}_${f.id}_${date}_${slot}`;
+  if (state.bookings[key]) {
+    delete state.bookings[key];
+    showToast('Booking cancelled.');
+  } else {
+    state.bookings[key] = true;
+    $('#slotSuccess').text(`✓ Slot ${slot} booked for ${date}!`).show();
+    showToast('Slot booked successfully! 🎉');
+  }
+  DB.save(state);
+  renderSlots();
+  renderFacilities();
+}
+
+// ══════════════════════════════════════════════
+//  NOTICES
+// ══════════════════════════════════════════════
+function renderNotices(filter='All') {
+  const filters = ['All','Urgent','Normal','Info'];
+  let tabHtml = '';
+  filters.forEach(f => {
+    tabHtml += `<button class="tab-btn${f===filter?' active':''}" onclick="renderNotices('${f}')">${f}</button>`;
+  });
+  $('#noticeTabs').html(tabHtml);
+
+  const pMap = {All:null, Urgent:'high', Normal:'medium', Info:'low'};
+  const list = pMap[filter] ? DB.notices.filter(n=>n.priority===pMap[filter]) : DB.notices;
+  const bColor = {high:'var(--danger)', medium:'var(--gold-dk)', low:'var(--info)'};
+  const bBg    = {high:'var(--d-bg)',   medium:'var(--gold-lt)', low:'var(--i-bg)'};
+  const bLabel = {high:'Urgent',        medium:'Normal',          low:'Info'};
+  let html = '';
+  list.forEach((n,i)=>{
+    html += `
+    <div class="au d${Math.min(i+1,5)}" style="background:var(--surface);border:1px solid var(--border);border-left:3px solid ${bColor[n.priority]};border-radius:0 var(--r-lg) var(--r-lg) 0;padding:18px 22px;box-shadow:var(--sh)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:8px">
+        <div style="font-size:15px;font-weight:600">${n.title}</div>
+        <span class="badge-pill" style="background:${bBg[n.priority]};color:${bColor[n.priority]};flex-shrink:0">${bLabel[n.priority]}</span>
+      </div>
+      <p style="font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:10px">${n.body}</p>
+      <div style="font-size:11px;color:var(--muted);display:flex;gap:18px">
+        <span><i class="bi bi-person"></i> ${n.postedBy}</span>
+        <span><i class="bi bi-calendar3"></i> ${new Date(n.date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}</span>
+        <span><i class="bi bi-tag"></i> ${n.dept==='all'?'All Departments':n.dept}</span>
+      </div>
+    </div>`;
+  });
+  $('#noticeList').html(html||'<div style="text-align:center;padding:40px;color:var(--muted)">No notices in this category.</div>');
+}
+
+// ══════════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════════
+let toastTimer;
+function showToast(msg) {
+  clearTimeout(toastTimer);
+  $('#toast').text(msg).show();
+  toastTimer = setTimeout(()=>$('#toast').fadeOut(), 3000);
+}
+</script>
+</body>
+</html>
